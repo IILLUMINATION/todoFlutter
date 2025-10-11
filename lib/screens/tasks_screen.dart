@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import 'package:tutor/models/task.dart';
-import 'package:tutor/providers/tasks_provider.dart';
-import 'package:tutor/screens/create_task_screen.dart';
+import 'package:todo_flutter/providers/tasks_provider.dart';
+import 'package:todo_flutter/screens/create_task_screen.dart';
 
 class TasksScreen extends ConsumerWidget {
   const TasksScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tutor/screens/tasks_screen.dart';
+import 'package:todo_flutter/screens/tasks_screen.dart';
 
 class Button extends StatelessWidget {
   final String text;

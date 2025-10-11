@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tutor/models/task.dart';
-import 'package:tutor/screens/menu_screen.dart';
+import 'package:todo_flutter/models/task.dart';
+import 'package:todo_flutter/screens/menu_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {

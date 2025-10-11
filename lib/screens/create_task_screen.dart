@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:tutor/models/task.dart';
+import 'package:todo_flutter/models/task.dart';
 
 class CreateTaskScreen extends StatelessWidget {
   final VoidCallback onTaskAdded;
