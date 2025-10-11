@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:todo_flutter/models/task.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateTaskScreen extends StatelessWidget {
   final VoidCallback onTaskAdded;
@@ -25,7 +26,8 @@ class CreateTaskScreen extends StatelessWidget {
 
                 if (text.isNotEmpty) {
                   final box = Hive.box<Task>("tasks");
-                  box.add(Task(false, text));
+                  final newId = const Uuid().v4();
+                  box.put(newId, Task(false, text, newId));
 
                   textFieldController.clear();
                   Navigator.pop(context);

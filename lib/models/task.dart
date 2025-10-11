@@ -8,6 +8,8 @@ class Task {
   String text;
   @HiveField(1)
   bool done;
+  @HiveField(2)
+  final String id;
 
-  Task(this.done, this.text);
+  Task(this.done, this.text, this.id);
 }
