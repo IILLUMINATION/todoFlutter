@@ -1,16 +1,23 @@
-# tutor
+# 📝 TodoFlutter
 
-A new Flutter project.
+> Простое, быстрое и красивое приложение для задач, написанное на **Flutter**.
 
-## Getting Started
+![Main](https://i.ibb.co/JjB1Jdsp/image.png)
 
-This project is a starting point for a Flutter application.
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-%230175C2.svg?logo=dart&logoColor=white)
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Особенности
+- Локальное хранение задач
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+| Главный экран | Добавление задачи | Все заметки |
+|---------------|-------------------|-------------|
+| ![Main](https://i.ibb.co/Pzj8NW8c/image.png) | ![Add](https://i.ibb.co/ptYGGY4/image.png) | ![All](https://i.ibb.co/WNYpLFvN/image.png) |
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Запуск локально
+```bash
+git clone https://github.com/IILLUMINATION/todoFlutter.git
+cd todoFlutter
+flutter pub get
+flutter run
