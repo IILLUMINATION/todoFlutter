@@ -2,7 +2,7 @@
 
 > Простое, быстрое и красивое приложение для задач, написанное на **Flutter**.
 
-![Main](https://i.ibb.co/JjB1Jdsp/image.png)
+![Main](screenshoots/image (1).png)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?logo=flutter&logoColor=white)
@@ -13,7 +13,7 @@
 
 | Главный экран | Добавление задачи | Все заметки |
 |---------------|-------------------|-------------|
-| ![Main](https://i.ibb.co/Pzj8NW8c/image.png) | ![Add](https://i.ibb.co/ptYGGY4/image.png) | ![All](https://i.ibb.co/WNYpLFvN/image.png) |
+| ![Main](screenshoots/image (6).png) | ![Add](screenshoots/image (4).png) | ![All](screenshoots/image (5).png) |
 
 ## 🚀 Запуск локально
 ```bash
