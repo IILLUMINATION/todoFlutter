@@ -2,7 +2,7 @@
 
 > Простое, быстрое и красивое приложение для задач, написанное на **Flutter**.
 
-![Main](screenshoots/image (1).png)
+![Main](screenshots/image1.png)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?logo=flutter&logoColor=white)
@@ -11,9 +11,9 @@
 ## ✨ Особенности
 - Локальное хранение задач
 
-| Главный экран | Добавление задачи | Все заметки |Ы
+| Главный экран | Добавление задачи | Все заметки |
 |---------------|-------------------|-------------|
-| ![Main](screenshots/image (6).png) | ![Add](screenshots/image (4).png) | ![All](screenshots/image (5).png) |
+| ![Main](screenshots/image2.png) | ![Add](screenshots/image4.png) | ![All](screenshots/image3.png) |
 
 ## 🚀 Запуск локально
 ```bash
