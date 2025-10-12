@@ -31,12 +31,15 @@ class TasksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(tasksProvider);
-    List<Widget> _buildTasks() {
+    final tasksCommon = ref.watch(tasksProvider);
+    final sortedTasks = [...tasksCommon]
+      ..sort((a, b) => b.priority.compareTo(a.priority));
+
+    List<Widget> _buildTasks(tasks) {
       List<Widget> widgets = [];
 
       if (tasks.length > 0) {
-        for (int i = 0; i < tasks.length; i++) {
+        for (int i = 0; i < sortedTasks.length; i++) {
           TextDecoration? decoration;
           if (tasks[i].done) {
             decoration = TextDecoration.lineThrough;
@@ -113,12 +116,12 @@ class TasksScreen extends ConsumerWidget {
                 "Мои задачи",
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
-              if (tasks.isEmpty)
+              if (tasksCommon.isEmpty)
                 NoneTasks()
               else
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Column(children: [..._buildTasks()]),
+                    child: Column(children: [..._buildTasks(sortedTasks)]),
                   ),
                 ),
               SizedBox(height: 20),
