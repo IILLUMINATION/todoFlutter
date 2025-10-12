@@ -36,15 +36,26 @@ class TasksScreen extends ConsumerWidget {
 
       if (tasks.length > 0) {
         for (int i = 0; i < tasks.length; i++) {
+          TextDecoration? decoration;
+          if (tasks[i].done) {
+            decoration = TextDecoration.lineThrough;
+          }
           widgets.add(
             Row(
               key: ValueKey(tasks[i].id),
               children: [
                 Icon(Icons.note),
                 SizedBox(width: 10),
-                Text(
-                  tasks[i].text,
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+                Expanded(
+                  child: Text(
+                    tasks[i].text,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      decoration: decoration,
+                      decorationColor: Colors.red,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 10),
                 Checkbox(
