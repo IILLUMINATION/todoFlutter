@@ -7,10 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Remove old Flutter
+        run: rm -rf "$HOME/.flutter"
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
+      - name: Check Flutter and Dart versions
+        run: |
+          flutter --version
+          dart --version
       - name: Install dependencies
         run: flutter pub get
       - name: Build APK
