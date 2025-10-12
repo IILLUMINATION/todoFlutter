@@ -1,28 +1,58 @@
 name: Build APK
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Remove old Flutter
-        run: rm -rf "$HOME/.flutter"
-      - uses: subosito/flutter-action@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          flutter-version: '3.24.0'  # Обязательно версия с Dart 3.7.0+
           channel: 'stable'
-      - name: Check Flutter and Dart versions
+          clean: true  # Автоматическая очистка предыдущих установок
+
+      - name: Verify Flutter environment
         run: |
           flutter --version
           dart --version
+          flutter doctor -v
+
+      - name: Clean pub cache
+        run: |
+          rm -rf ~/.pub-cache
+          rm -rf ./build
+          rm -rf .dart_tool
+
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter pub outdated --no-prompt
+
       - name: Build APK
-        run: flutter build apk --release --no-sound-null-safety
+        run: |
+          flutter build apk \
+            --release \
+            --no-sound-null-safety \
+            --verbose
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
+        if: success()
+
+      - name: Cleanup on failure
+        run: |
+          echo "Build failed. Collecting diagnostic information..."
+          ls -la
+          cat pubspec.yaml
+        if: failure()
