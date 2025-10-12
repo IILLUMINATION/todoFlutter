@@ -15,11 +15,11 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'  # Обязательно версия с Dart 3.7.0+
+          flutter-version: '3.27.0'
           channel: 'stable'
-          clean: true  # Автоматическая очистка предыдущих установок
+          clean: true
 
-      - name: Verify Flutter environment
+      - name: Verify environment
         run: |
           flutter --version
           dart --version
@@ -50,9 +50,15 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
         if: success()
 
-      - name: Cleanup on failure
+      - name: Diagnostic on failure
         run: |
-          echo "Build failed. Collecting diagnostic information..."
-          ls -la
+          echo "Build failed. Diagnostic information:"
+          echo "Current Dart version:"
+          dart --version
+          echo "Flutter version:"
+          flutter --version
+          echo "pubspec.yaml:"
           cat pubspec.yaml
+          echo "Flutter doctor output:"
+          flutter doctor -v
         if: failure()
