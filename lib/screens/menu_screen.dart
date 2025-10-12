@@ -17,8 +17,13 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: callback,
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
       child: Row(
-        children: [Text(text), SizedBox(width: 10), Icon(icon)],
+        children: [
+          Text(text, style: TextStyle(color: Colors.white)),
+          SizedBox(width: 10),
+          Icon(icon, color: Colors.black),
+        ],
         mainAxisSize: MainAxisSize.min,
       ),
     );
@@ -32,7 +37,7 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Button> _listButtons = [
       Button(
-        icon: Icons.book,
+        icon: Icons.book_online,
         text: "Мои задачи",
         callback: () {
           Navigator.push(
@@ -63,9 +68,19 @@ class MenuScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text("TODO", style: TextStyle(color: Colors.white, fontSize: 35)),
+            Text(
+              "Flutter",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
             SizedBox(height: 20),
             ..._buildButtons(),
-            Text("build 1"),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                "версия 1.0.3",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
