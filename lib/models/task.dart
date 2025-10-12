@@ -13,5 +13,10 @@ class Task {
   @HiveField(3)
   int priority;
 
-  Task(this.done, this.text, this.id, this.priority);
+  Task({
+    required this.done,
+    required this.text,
+    required this.id,
+    required this.priority,
+  });
 }
