@@ -2,11 +2,11 @@ name: Build APK
 on:
   push:
     branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FLUTTER_VERSION: '3.28.0-0.0.pre'  # Используем dev-канал для доступа к Dart 3.7.0+
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,70 +14,20 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Flutter (dev channel)
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'dev'  # Ключевой момент: используем dev-канал
-          clean: true
+          channel: 'stable'
+          cache: true
 
-      - name: Verify environment
-        run: |
-          echo "Flutter version:"
-          flutter --version
-          echo "Dart version:"
-          dart --version
-          echo "Flutter doctor:"
-          flutter doctor -v
-          echo "Pubspec.yaml environment:"
-          grep -A 5 "environment:" pubspec.yaml
-
-      - name: Clean pub cache
-        run: |
-          rm -rf ~/.pub-cache
-          rm -rf ./build
-          rm -rf .dart_tool
-          rm -rf .packages
-
-      - name: Install dependencies
-        run: |
-          echo "Current Dart SDK version:"
-          dart --version
-          echo "Checking environment requirements..."
-          if ! grep -q "sdk:.*>=3.7.0" pubspec.yaml; then
-            echo "Warning: Project requires Dart >=3.7.0 but pubspec.yaml doesn't specify it"
-            echo "Consider updating pubspec.yaml environment section:"
-            echo "environment:"
-            echo "  sdk: '>=3.7.0 <4.0.0'"
-          fi
-          flutter pub get
-          flutter pub outdated --no-prompt
+      - name: Get dependencies
+        run: flutter pub get
 
       - name: Build APK
-        run: |
-          flutter build apk \
-            --release \
-            --no-sound-null-safety \
-            --verbose
+        run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
-        if: success()
-
-      - name: Diagnostic on failure
-        run: |
-          echo "Build failed. Diagnostic information:"
-          echo "Current Dart version:"
-          dart --version
-          echo "Flutter version:"
-          flutter --version
-          echo "Flutter doctor output:"
-          flutter doctor -v
-          echo "pubspec.yaml environment section:"
-          grep -A 5 "environment:" pubspec.yaml
-          echo "Available Flutter versions:"
-          flutter version
-        if: failure()
