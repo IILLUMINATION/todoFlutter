@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:todo_flutter/models/task.dart';
 import 'package:todo_flutter/providers/tasks_provider.dart';
 import 'package:todo_flutter/screens/create_task_screen.dart';
+import 'package:todo_flutter/utils/helpers.dart';
 
 class NoneTasks extends StatelessWidget {
   const NoneTasks({super.key});
@@ -41,41 +42,54 @@ class TasksScreen extends ConsumerWidget {
             decoration = TextDecoration.lineThrough;
           }
           widgets.add(
-            Row(
-              key: ValueKey(tasks[i].id),
+            Column(
               children: [
-                Icon(Icons.note),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    tasks[i].text,
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      decoration: decoration,
-                      decorationColor: Colors.red,
+                Row(
+                  key: ValueKey(tasks[i].id),
+                  children: [
+                    Icon(Icons.note),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        tasks[i].text,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white,
+                          decoration: decoration,
+                          decorationColor: Colors.red,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Checkbox(
-                  value: tasks[i].done,
-                  onChanged: (bool? value) {
-                    final box = Hive.box<Task>("tasks");
+                    SizedBox(width: 10),
+                    Checkbox(
+                      value: tasks[i].done,
+                      onChanged: (bool? value) {
+                        final box = Hive.box<Task>("tasks");
 
-                    tasks[i].done = value ?? false;
-                    box.put(tasks[i].id, tasks[i]);
-                    ref.invalidate(tasksProvider);
-                  },
+                        tasks[i].done = value ?? false;
+                        box.put(tasks[i].id, tasks[i]);
+                        ref.invalidate(tasksProvider);
+                      },
+                    ),
+                    SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {
+                        final box = Hive.box<Task>("tasks");
+                        box.delete(tasks[i].id);
+                        ref.invalidate(tasksProvider);
+                      },
+                      icon: Icon(Icons.delete, color: Colors.white),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                IconButton(
-                  onPressed: () {
-                    final box = Hive.box<Task>("tasks");
-                    box.delete(tasks[i].id);
-                    ref.invalidate(tasksProvider);
-                  },
-                  icon: Icon(Icons.delete, color: Colors.white),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Приоритет: ${checkerPriority(tasks[i].priority)}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -113,11 +127,12 @@ class TasksScreen extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CreateTaskScreen(
-                        onTaskAdded: () {
-                          ref.invalidate(tasksProvider);
-                        },
-                      ),
+                      builder:
+                          (context) => CreateTaskScreen(
+                            onTaskAdded: () {
+                              ref.invalidate(tasksProvider);
+                            },
+                          ),
                     ),
                   );
                 },

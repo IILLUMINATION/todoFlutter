@@ -10,6 +10,8 @@ class Task {
   bool done;
   @HiveField(2)
   final String id;
+  @HiveField(3)
+  int priority;
 
-  Task(this.done, this.text, this.id);
+  Task(this.done, this.text, this.id, this.priority);
 }

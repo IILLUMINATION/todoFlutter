@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:todo_flutter/models/task.dart';
+import 'package:todo_flutter/utils/helpers.dart';
 import 'package:uuid/uuid.dart';
 
-class CreateTaskScreen extends StatelessWidget {
+final createTaskPriorityProvider = StateProvider<int>((ref) => 0);
+
+class CreateTaskScreen extends ConsumerWidget {
   final VoidCallback onTaskAdded;
 
   const CreateTaskScreen({super.key, required this.onTaskAdded});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textFieldController = TextEditingController();
+    final priority = ref.watch(createTaskPriorityProvider);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -31,6 +38,31 @@ class CreateTaskScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Выберите приоритет задачи:",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Slider(
+                  value: priority.toDouble(),
+                  min: 0,
+                  max: 2,
+                  divisions: 2,
+                  onChanged: (newValue) {
+                    ref.read(createTaskPriorityProvider.notifier).state =
+                        newValue.toInt();
+                  },
+                ),
+                Text(
+                  checkerPriority(ref.read(createTaskPriorityProvider)),
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(height: 20),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
@@ -40,7 +72,7 @@ class CreateTaskScreen extends StatelessWidget {
                         if (text.isNotEmpty) {
                           final box = Hive.box<Task>("tasks");
                           final newId = const Uuid().v4();
-                          box.put(newId, Task(false, text, newId));
+                          box.put(newId, Task(false, text, newId, priority));
 
                           textFieldController.clear();
                           Navigator.pop(context);

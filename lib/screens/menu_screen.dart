@@ -19,12 +19,12 @@ class Button extends StatelessWidget {
       onPressed: callback,
       style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(text, style: TextStyle(color: Colors.white)),
           SizedBox(width: 10),
           Icon(icon, color: Colors.black),
         ],
-        mainAxisSize: MainAxisSize.min,
       ),
     );
   }
@@ -35,7 +35,7 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Button> _listButtons = [
+    final List<Button> listButtons = [
       Button(
         icon: Icons.book_online,
         text: "Мои задачи",
@@ -48,12 +48,12 @@ class MenuScreen extends StatelessWidget {
       ),
     ];
 
-    List<Widget> _buildButtons() {
+    List<Widget> buildButtons() {
       List<Widget> widgets = [];
 
-      for (int i = 0; i < _listButtons.length; i++) {
-        widgets.add(_listButtons[i]);
-        if (i != _listButtons.length - 1) {
+      for (int i = 0; i < listButtons.length; i++) {
+        widgets.add(listButtons[i]);
+        if (i != listButtons.length - 1) {
           widgets.add(SizedBox(height: 10));
         }
       }
@@ -73,7 +73,7 @@ class MenuScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             SizedBox(height: 20),
-            ..._buildButtons(),
+            ...buildButtons(),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
