@@ -16,7 +16,7 @@
 
 | Главный экран | Добавление задачи | Все заметки |
 |---------------|-------------------|-------------|
-| ![Main](screenshots/image2.png) | ![Add](screenshots/image4.png) | ![All](screenshots/image3.png) |
+| ![Main](screenshots/image2.jng) | ![Add](screenshots/image4.jng) | ![All](screenshots/image3.jng) |
 
 ⭐Дорожная карта:
 - Добавить фото к задачам

@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:todo_flutter/models/task.dart';
 import 'package:todo_flutter/providers/tasks_provider.dart';
 import 'package:todo_flutter/utils/helpers.dart';
-import 'package:uuid/uuid.dart';
 
 final createTaskPriorityProvider = StateProvider<int>((ref) => 0);
 
-class CreateTaskScreen extends ConsumerWidget {
+class CreateTaskScreen extends ConsumerStatefulWidget {
   const CreateTaskScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textFieldController = TextEditingController();
+  ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
+}
+
+class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
+  final TextEditingController _textFieldController = TextEditingController();
+
+  void despose() {
+    _textFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final priority = ref.watch(createTaskPriorityProvider);
 
     return Scaffold(
@@ -31,7 +40,7 @@ class CreateTaskScreen extends ConsumerWidget {
               SizedBox(height: 20),
               TextField(
                 style: TextStyle(color: Colors.white),
-                controller: textFieldController,
+                controller: _textFieldController,
                 decoration: InputDecoration(hintText: "Текст задачи"),
               ),
               SizedBox(height: 20),
@@ -65,13 +74,13 @@ class CreateTaskScreen extends ConsumerWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      String text = textFieldController.text.trim();
+                      String text = _textFieldController.text.trim();
 
                       if (text.isNotEmpty) {
                         ref
                             .read(tasksProvider.notifier)
                             .createTask(text, priority);
-                        textFieldController.clear();
+                        _textFieldController.clear();
                         Navigator.pop(context);
                       }
                     },
