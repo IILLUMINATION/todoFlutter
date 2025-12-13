@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:todo_flutter/providers/tasks_provider.dart';
 import 'package:todo_flutter/utils/helpers.dart';
