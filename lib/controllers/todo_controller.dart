@@ -20,6 +20,7 @@ class TodoController {
   }
   //добавление задачи
 
+  //удаление задачи
   void removeTodo(String id) {
     //копируем в отдельный локал лист т.к нельзя работать с реактивностью
     List<Todo> allTasks = _tasks.value;
@@ -35,5 +36,23 @@ class TodoController {
 
     _tasks.value = safeTasks;
   }
-  //удаление задачи
+
+  //изменение статуса задачи
+  void changeStatus(String id) {
+    List<Todo> allTasks = _tasks.value;
+    List<Todo> safeTasks = [];
+
+    for (int i = 0; i < allTasks.length; i++) {
+      Todo task = allTasks[i];
+
+      if (task.id == id) {
+        Todo newTask =
+            Todo(id: task.id, title: task.title, isDone: !task.isDone);
+        safeTasks.add(newTask);
+      } else {
+        safeTasks.add(task);
+      }
+    }
+    _tasks.value = safeTasks;
+  }
 }
