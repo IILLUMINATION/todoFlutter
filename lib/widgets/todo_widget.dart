@@ -31,7 +31,12 @@ class TodoWidget extends StatelessWidget {
                   child: Text(
                 todo.title,
                 style: TextStyle(color: Colors.white),
-              ))
+              )),
+              IconButton(
+                  onPressed: () {
+                    todoController.removeTodo(todo.id);
+                  },
+                  icon: Icon(Icons.delete))
             ],
           ),
         ),
