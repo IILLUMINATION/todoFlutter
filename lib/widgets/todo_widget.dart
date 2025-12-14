@@ -34,9 +34,39 @@ class TodoWidget extends StatelessWidget {
               )),
               IconButton(
                   onPressed: () {
-                    todoController.removeTodo(todo.id);
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.brown,
+                            title: Text("Удалить тудушку?",
+                                style: TextStyle(color: Colors.white)),
+                            content: Text(
+                              "Это уже потом не отменить ес что, так к слову",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    todoController.removeTodo(todo.id);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Удаляй, плевать!!!",
+                                      style: TextStyle(color: Colors.white))),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Чёта передумал...",
+                                      style: TextStyle(color: Colors.white)))
+                            ],
+                          );
+                        });
                   },
-                  icon: Icon(Icons.delete))
+                  icon: Icon(
+                    Icons.remove_moderator,
+                    color: Colors.white,
+                  ))
             ],
           ),
         ),
