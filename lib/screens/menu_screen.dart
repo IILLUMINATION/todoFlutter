@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:todo_flutter/controllers/todo_controller.dart';
+import 'package:todo_flutter/screens/add_task_screen.dart';
+import 'package:todo_flutter/utils/common.dart';
 import 'package:todo_flutter/widgets/todo_widget.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -21,39 +23,6 @@ class MenuScreen extends StatefulWidget {
 //класс состояния и билда отображения, наследуется от State
 class _MenuScreenState extends State<MenuScreen> {
   //указываем тип виджета с которым связано состояние через <>
-  late final TextEditingController _textController;
-
-  //лейт это значит что мы объявляем переменную и пока что там нету данных но мы обещаем флаттеру что будут позже
-
-  //переопределяем стандартные методы, нужно чтобы не было утечек памяти связанных с текстовым полем
-  @override
-  //инициализация состояния
-  void initState() {
-    super.initState();
-    //чёто типо стандартного бойлерпринта всегда нужно писать в первую очередь кроме диспосе по моему
-    _textController = TextEditingController();
-    //объявляем контрллер текстовому полю
-  }
-
-  //тут всё плюс минус также
-  @override
-  void dispose() {
-    _textController.dispose();
-    //вызываем его уже после очистки
-    super.dispose();
-  }
-
-  //создаём приватную функцию для добавления задач которая ничего не возвращает т.к void
-  void _addTask() {
-    //берём с текстового контроллера текущий текст из поля
-    final text = _textController.text;
-
-    //с помощью нашего контроллера добавляем задачу у нас аргумент 1 это тайтл
-    todoController.addTodo(text);
-
-    //чистим поле чтобы текста не было старого
-    _textController.clear();
-  }
 
   //переопределяем стандартный метод билд
   @override
@@ -121,22 +90,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 );
               }),
             ),
-            //текстовое поле
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: TextField(
-                //указываем наш контроллер
-                controller: _textController,
-                onSubmitted: (_) {
-                  // (_) используется потому что передаёт он по умолчанию параметр
-                  //он передаёт текст из поля, но мы то юзаем текст по .text
-                  //поэтому ставим типо затычка
-                  //вызываем добавление задачи вообще тут можно было бы передать как аргумент тайтл но ладно
 
-                  _addTask();
-                },
-              ),
-            ),
             //пустота
             SizedBox(
               height: 20,
@@ -145,7 +99,8 @@ class _MenuScreenState extends State<MenuScreen> {
             ElevatedButton(
                 //функция при нажатии, ну тут опять так вызываем добавление задачи
                 onPressed: () {
-                  _addTask();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTaskScreen()));
                 },
                 //внутренности кнопки
                 child: Text("Добавить задачу")),

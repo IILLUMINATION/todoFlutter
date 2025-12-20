@@ -1,4 +1,24 @@
-// Файл: lib/controllers/todo_controller.dart
+﻿import 'package:flutter/material.dart';
+import 'package:signals/signals.dart';
+import 'package:todo_flutter/screens/menu_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final tasks = signal({});
+  print(tasks.value);
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: MenuScreen(), debugShowCheckedModeBanner: false);
+  }
+}
 import 'package:signals/signals_flutter.dart';
 import 'package:todo_flutter/models/todo.dart';
 import 'package:uuid/uuid.dart';
@@ -44,44 +64,19 @@ class TodoController {
     List<Todo> safeTasks = [];
 
     for (int i = 0; i < allTasks.length; i++) {
-      dynamic task = allTasks[i];
+      Todo task = allTasks[i];
 
       if (task.id == id) {
-        if (task.isDone) {
-          Todo newTask =
-              Todo(id: task.id, title: task.title, isDone: task.isDone);
-          safeTasks.add(newTask);
-        } else {
-          safeTasks.add(task);
-        }
+        Todo newTask =
+            Todo(id: task.id, title: task.title, isDone: !task.isDone);
+        safeTasks.add(newTask);
+      } else {
+        safeTasks.add(task);
       }
     }
     _tasks.value = safeTasks;
   }
 }
-// Файл: lib/main.dart
-import 'package:flutter/material.dart';
-import 'package:signals/signals.dart';
-import 'package:todo_flutter/screens/menu_screen.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final tasks = signal({});
-  print(tasks.value);
-
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: MenuScreen(), debugShowCheckedModeBanner: false);
-  }
-}
-// Файл: lib/models/todo.dart
 class Todo {
   final String id;
   final String title;
@@ -94,10 +89,72 @@ class Todo {
         id: id, title: title ?? this.title, isDone: isDone ?? this.isDone);
   }
 }
-// Файл: lib/screens/menu_screen.dart
+import 'package:flutter/material.dart';
+import 'package:todo_flutter/utils/common.dart';
+
+class AddTaskScreen extends StatefulWidget {
+  const AddTaskScreen({super.key});
+
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  late final TextEditingController _textController;
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(40),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Добавить задачу",
+                style: TextStyle(color: Colors.white, fontSize: 30),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: "Введите задачу"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    addTask(_textController.text);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Готово"))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:todo_flutter/controllers/todo_controller.dart';
+import 'package:todo_flutter/screens/add_task_screen.dart';
+import 'package:todo_flutter/utils/common.dart';
 import 'package:todo_flutter/widgets/todo_widget.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -140,18 +197,6 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
-  //создаём приватную функцию для добавления задач которая ничего не возвращает т.к void
-  void _addTask() {
-    //берём с текстового контроллера текущий текст из поля
-    final text = _textController.text;
-
-    //с помощью нашего контроллера добавляем задачу у нас аргумент 1 это тайтл
-    todoController.addTodo(text);
-
-    //чистим поле чтобы текста не было старого
-    _textController.clear();
-  }
-
   //переопределяем стандартный метод билд
   @override
   Widget build(BuildContext context) {
@@ -190,7 +235,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 //проверяем что лист задач пуст, если да то текст юзеру пихаем
                 if (taskList.isEmpty) {
                   return const Text(
-                    "Пусто",
+                    "Пусто, добавь ка задачку",
                     style: TextStyle(color: Colors.white),
                   );
                 }
@@ -218,19 +263,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 );
               }),
             ),
-            //текстовое поле
-            TextField(
-              //указываем наш контроллер
-              controller: _textController,
-              onSubmitted: (_) {
-                // (_) используется потому что передаёт он по умолчанию параметр
-                //он передаёт текст из поля, но мы то юзаем текст по .text
-                //поэтому ставим типо затычка
-                //вызываем добавление задачи вообще тут можно было бы передать как аргумент тайтл но ладно
 
-                _addTask();
-              },
-            ),
             //пустота
             SizedBox(
               height: 20,
@@ -239,7 +272,8 @@ class _MenuScreenState extends State<MenuScreen> {
             ElevatedButton(
                 //функция при нажатии, ну тут опять так вызываем добавление задачи
                 onPressed: () {
-                  _addTask();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddTaskScreen()));
                 },
                 //внутренности кнопки
                 child: Text("Добавить задачу")),
@@ -253,7 +287,14 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 }
-// Файл: lib/widgets/todo_widget.dart
+import 'package:todo_flutter/controllers/todo_controller.dart';
+
+addTask(String text) {
+  print(text);
+  todoController.addTodo(text);
+
+  return true;
+}
 import 'package:flutter/material.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:todo_flutter/controllers/todo_controller.dart';
@@ -287,7 +328,42 @@ class TodoWidget extends StatelessWidget {
                   child: Text(
                 todo.title,
                 style: TextStyle(color: Colors.white),
-              ))
+              )),
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.brown,
+                            title: Text("Удалить тудушку?",
+                                style: TextStyle(color: Colors.white)),
+                            content: Text(
+                              "Это уже потом не отменить ес что, так к слову",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    todoController.removeTodo(todo.id);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Удаляй, плевать!!!",
+                                      style: TextStyle(color: Colors.white))),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Чёта передумал...",
+                                      style: TextStyle(color: Colors.white)))
+                            ],
+                          );
+                        });
+                  },
+                  icon: Icon(
+                    Icons.remove_moderator,
+                    color: Colors.white,
+                  ))
             ],
           ),
         ),

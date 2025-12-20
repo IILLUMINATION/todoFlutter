@@ -1,0 +1,1 @@
+Get-ChildItem -Path "lib" -Recurse -Filter *.dart | ForEach-Object { Get-Content $_.FullName -Encoding UTF8 } | Set-Content "all_dart.txt" -Encoding UTF8
